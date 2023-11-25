@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Cabin&family=DM+Sans:opsz,wght@9..40,300&family=Dancing+Script:wght@700&family=Pixelify+Sans&family=Roboto+Condensed&family=Roboto+Slab&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #111315;
+  font-family: "DM Sans", sans-serif;
+}
