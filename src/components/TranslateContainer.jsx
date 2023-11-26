@@ -4,6 +4,7 @@ import Translate from "./Translate";
 import logo from "../assets/logo.svg";
 
 export default function TranslateContainer() {
+  const msg = new SpeechSynthesisUtterance();
   const [detectLang, setDetectLang] = useState("English");
   const [detectCode, setDetectCode] = useState("en");
   const [translateLang, setTranslateLang] = useState("French");
@@ -33,6 +34,11 @@ export default function TranslateContainer() {
         console.log(error);
       });
   }
+
+  const handleSpeakText = (text) => {
+    msg.text = text;
+    window.speechSynthesis.speak(msg);
+  };
 
   const detectLanguageAutomatically = async (inputValue) => {
     // const response = await fetch(
@@ -90,6 +96,7 @@ export default function TranslateContainer() {
           handleTranslate={handleTranslate}
           handleCopy={handleCopy}
           loading={loading}
+          handleSpeakText={handleSpeakText}
         />
         <Translate
           language={translateLang}
@@ -97,6 +104,7 @@ export default function TranslateContainer() {
           translatedValue={translatedValue}
           setTranslatedValue={setTranslatedValue}
           handleCopy={handleCopy}
+          handleSpeakText={handleSpeakText}
         />
       </div>
     </div>

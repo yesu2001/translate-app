@@ -12,6 +12,7 @@ export default function Detect({
   setInputValue,
   handleTranslate,
   handleCopy,
+  handleSpeakText,
   loading,
 }) {
   const [minLetters, setMinLetters] = useState(0);
@@ -24,6 +25,9 @@ export default function Detect({
   const [message, setMessage] = useState(null);
 
   useEffect(() => {
+    if (minLetters > 500) {
+      alert("Not more than 500 characters");
+    }
     setMinLetters(inputValue.length);
   }, [inputValue]);
   return (
@@ -64,7 +68,8 @@ export default function Detect({
           <img
             src={sound}
             alt=""
-            className="border-2 border-[#4D5562] rounded-xl p-1 cursor-not-allowed"
+            className="border-2 border-[#4D5562] rounded-xl p-1 cursor-pointer"
+            onClick={() => handleSpeakText(inputValue)}
           />
           <img
             src={copy}

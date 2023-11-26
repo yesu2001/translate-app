@@ -10,6 +10,7 @@ export default function Translate({
   translatedValue,
   setTranslatedValue,
   handleCopy,
+  handleSpeakText,
 }) {
   const defaultLang = [
     { name: "English", code: "en" },
@@ -60,7 +61,8 @@ export default function Translate({
           <img
             src={sound}
             alt=""
-            className="border-2 border-[#4D5562] rounded-xl p-1 cursor-not-allowed"
+            className="border-2 border-[#4D5562] rounded-xl p-1 cursor-pointer"
+            onClick={() => handleSpeakText(translatedValue)}
           />
           <img
             src={copy}
