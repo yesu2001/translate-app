@@ -1,27 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import sound from "../assets/sound_max_fill.svg";
 import copy from "../assets/Copy.svg";
 import alpha from "../assets/Sort_alfa.svg";
 import DropDown from "./DropDown";
 import { languages } from "../data/languages";
 
-export default function Detect({ handleTranslate }) {
+export default function Detect({
+  language,
+  handleSelectLanguage,
+  inputValue,
+  setInputValue,
+  handleTranslate,
+  handleCopy,
+  loading,
+}) {
+  const [minLetters, setMinLetters] = useState(0);
+  const defaultLang = [
+    { name: "English", code: "en" },
+    { name: "French", code: "fr" },
+  ];
+
+  // console.log(language);
+  const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    setMinLetters(inputValue.length);
+  }, [inputValue]);
   return (
     <div className="flex-[0.5] bg-[#212936cc] p-6 rounded-3xl border border-slate-600">
-      <div className="flex gap-6 border-b border-slate-700 py-3 px-3 text-sm tracking-wide text-[#4D5562] font-semibold">
-        <p>Detect Language</p>
-        <p>English</p>
-        <p>French</p>
-        <DropDown />
+      <div className="flex items-center gap-6 border-b border-slate-700 pb-3 px-3 text-sm tracking-wide text-[#4D5562] font-semibold">
+        <p className="flex items-center">Detect Language</p>
+        {defaultLang.map((item) => (
+          <p
+            key={item.code}
+            onClick={() => handleSelectLanguage(item.name, item.code)}
+            className={`cursor-pointer ${
+              language === item.name ? "bg-[#4D5562] text-white" : ""
+            } px-2 py-1 rounded-md`}
+          >
+            {item.name}
+          </p>
+        ))}
+        <DropDown
+          handleSelectLanguage={handleSelectLanguage}
+          language={language}
+        />
       </div>
 
       <div className="relative pt-4 pb-3 w-full">
         <textarea
           className="w-full h-32 resize-none outline-none bg-transparent text-white font-semibold"
-          placeholder="hello how are you?"
+          placeholder={inputValue}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
         <p className="absolute bottom-2 right-0 text-[#4D5562] teext-sm">
-          123/500
+          {minLetters}/500
         </p>
       </div>
 
@@ -35,8 +69,16 @@ export default function Detect({ handleTranslate }) {
           <img
             src={copy}
             alt=""
+            onClick={() => {
+              handleCopy(inputValue);
+              setMessage("Copied!");
+              setTimeout(() => {
+                setMessage(null);
+              }, 2000);
+            }}
             className="border-2 border-[#4D5562] rounded-xl p-1 cursor-pointer"
           />
+          {message && <p className="text-slate-300">{message}</p>}
         </div>
 
         <button
@@ -44,20 +86,9 @@ export default function Detect({ handleTranslate }) {
           onClick={handleTranslate}
         >
           <img src={alpha} alt="alpha icon" />
-          Translate
+          {loading ? "Loading.." : "Translate"}
         </button>
       </div>
     </div>
   );
 }
-
-// https://mymemory.translated.net/doc/spec.php
-
-// fetch('https://api.mymemory.translated.net/get?q=Hello,%20how%20are%20you?!&langpair=en|fr')
-//   .then(response => response.json())
-//   .then(data => {
-//     console.log(data)
-//   })
-//   .catch(error => {
-//     console.log(error)
-//   })
